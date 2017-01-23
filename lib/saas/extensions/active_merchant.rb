@@ -1,0 +1,6 @@
+require 'saas/extensions/active_merchant/billing/credit_card'
+require 'saas/extensions/active_merchant/billing/response'
+require 'saas/extensions/active_merchant/billing/gateways/authorize_net_cim'
+require 'saas/extensions/active_merchant/billing/gateways/bogus'
+require 'saas/extensions/active_merchant/billing/gateways/payment_express'
+require 'saas/extensions/active_merchant/billing/gateways/stripe'

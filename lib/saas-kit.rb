@@ -1,0 +1,5 @@
+require 'active_merchant'
+require 'active_merchant/billing/rails'
+require 'saas/extensions/active_merchant'
+require 'saas/engine'
+require 'saas/saas'

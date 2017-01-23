@@ -1,0 +1,15 @@
+Uh-oh!
+
+We were unable to process your payment of
+<%= number_to_currency(@subscription.amount) %> for your <%= @subscription.subscription_plan.name %> plan. 
+
+Please visit your account page at the following URL to update
+your payment information as soon as possible:
+
+<%= @subscriber.home_url("subscription") %>
+
+
+If you have any questions about this email, please contact 
+<%= Saas::Config.from_email %>.
+
+Thank you for your business!

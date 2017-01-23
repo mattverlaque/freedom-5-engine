@@ -1,0 +1,118 @@
+<style type="text/css">
+
+h2, h3 {
+  margin-top: 60px;
+  margin-bottom: 30px;
+}
+p, blockquote, code {
+  margin-left: 20px;
+}
+</style>
+<div class="container">
+  <section class="content-header">
+    <div class="row">
+      <div class="panel-group">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h1>Welcome to the SaaS Kit Gem</h1>
+          </div>
+          <div class="panel-body">
+            <br />
+            <p>The SaaS Rails Kit gets your new software-as-a-service site off to a running start by providing you a well-tested and proven recurring billing system with credit card payments.</p>
+
+            <p>You also get a framework for building membership-based applications, including account signups/upgrades/downgrades, tiered pricing levels with customizable limits (e.g, # of users, # of projects, etc.), multi-tenant data security in a single database, and more.</p>
+
+            <h2>Getting Started with An Existing Application</h2>
+
+            <p>After updating your Gemfile and bundling this gem, run the following commands to get started:</p>
+
+            <blockquote>rails generate saas<br />
+              rake db:migrate saas:bootstrap</blockquote>
+
+            <p>This will update your database, load some sample data, and create a config file for you in config/saas.yml (which you should review).</p>
+
+            <p>Once that's done, you'll need to add the has_subscription call to the model that will have the has_one :subscription relationship (see the Account model in the sample app). See the controllers (including ApplicationController) for additional code you may want to pull into your existing application.</p>
+
+            <h2>FAQ</h2>
+
+              <!-- Set Up Subscription Functionality FAQ -->
+              <h3>How to set up subscriptions in your application?</h3>
+
+              <p>Saaskit is really simple to set up in your project, you can add subscription functionality to a model in your application, for instance a Company model, by adding `has_subscription` to the code:</p>
+
+              <pre>
+                <code>
+                  class Company < ActiveRecord::Base
+                    has_subscription({ 'user_limit' => Proc.new {|a| a.users.count } })
+                  end
+               </code>
+             </pre>
+
+             <p>This will make it possible to use `company.reached_user_limit?` to validate the constraint and you'll be able to build more functionality depending of this constraint.</p>
+
+             <p>The Subscription model has a polymorphic relationship to a “Subscriber”, in this case Company model.  This allows you to set up as many subscription flows as your bussiness needs.</p>
+
+             <!-- Customize Subscription Plans Limits FAQ -->
+             <h3>How to customize subscription plans limits?</h3>
+
+             <p>Saaskit provides the SubscriptionPlan model, where you could manage and customize the plans that you need for your business.</p>
+
+             <p>To add limits to your plan, you have to add a new column to your subscription_plans table. In a migration file:</p>
+
+             <blockquote>
+              add_column :subscription_plans, :user_limit, :integer<br />
+              add_column :subscription_plans, :video_limit, :integer
+            </blockquote>
+            ​
+            <p>Then you specify the limits in your parent model</p>
+            <pre>
+              <code>
+                class Company < ActiveRecord::Base
+                  has_subscription 'video_limit' => Proc.new {|company| company.videos.count,
+                    'user_limit' => Proc.new {|company| company.users.count }
+                end
+              </code>
+            </pre>
+            ​
+            <p>This will make it possible to use company.reached_video_limit? or company.reached_user_limit? to validate this constraint and add functionality depending of these limits.</p>
+
+            <!-- Extend SaasKit Model FAQ -->
+            <h3>How to extend saas-kit models?</h3>
+
+            <p>Let's say you want to add custom validation to the SubscriptionPlan model.</p>
+
+            <p>You can reopen the class</p>
+            <pre>
+              <code>
+                SubscriptioPlan.class_eval do
+                  validate :custom_validation
+
+                  def custom_validation
+                    if name.length < 3
+                      errors.add(:name, “Name is to short”)
+                    end
+                  end
+                end
+              </code>
+            </pre>
+
+            <p>After reopen the class, you have to require it in your code so that it is available to the rails app. Some ways to do this, are as follows:</p>
+
+            <p>Create an initializers with a `require 'lib/saas_extension.rb` line</p>
+            <p>Require the file directly in your `config/application.rb`:</p>
+
+            <pre>
+              <code>
+                config.after_initialize do
+                  require "#{Rails.root.join('app/decorators/subscription_plan_decorator.rb')}"
+                  # you can also require all the monkey patch at once like this
+                  # Dir[Rails.root.join("lib/saas_extentions/**/*.rb")].each { |f| require f }
+                end
+              </code>
+            </pre>
+          </div>
+      </div>
+    </div>
+</div>
+</section>
+</div>

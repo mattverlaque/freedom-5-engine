@@ -1,0 +1,24 @@
+defaults: &defaults
+  app_name: SampleApp
+  from_email: support@sampleapp.com
+  base_domain: sampleapp.com
+
+  gateway: bogus # change this to stripe to use stripe
+  credentials:
+    gateway:
+      :login: demo # stripe secret key goes here
+      :password: password # leave blank for stripe
+    stripe_publishable_key: # use this to send cc info directly to stripe via javascript
+development:
+  <<: *defaults
+  base_domain: subscriptions.dev # Edit /etc/hosts to add subscriptions.dev, test.subscriptions.dev, etc., or use Pow: http://pow.cx
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults
+  credentials:
+    gateway:
+      :login: demo
+      :password: password
