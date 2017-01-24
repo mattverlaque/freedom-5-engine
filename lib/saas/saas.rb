@@ -43,7 +43,7 @@ module Saas
 
       attr_accessor :plan, :plan_start, :creditcard, :address, :affiliate
 
-      after_commit :send_welcome_email, on: :create
+      #after_commit :send_welcome_email, on: :create
 
       class_attribute :subscription_limits
       self.subscription_limits = limits
